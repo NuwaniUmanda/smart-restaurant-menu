@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Restaurant Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            text-align: center;
+            color: white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+        }
+
+        .menu-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .category {
+            margin-bottom: 40px;
+        }
+
+        .category h2 {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .menu-item img {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-right: 20px;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .item-description {
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .item-price {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .item-tags {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .tag.spicy { background: #ffebee; color: #c62828; }
+        .tag.vegetarian { background: #e8f5e8; color: #2e7d32; }
+        .tag.healthy { background: #e3f2fd; color: #1976d2; }
+        .tag.popular { background: #fff3e0; color: #f57c00; }
+
+        .add-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .add-btn:hover {
+            background: #5a6fd8;
+        }
+
+        /* Chatbot Styles */
+        .chatbot-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .chatbot-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .chatbot-header h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #fafafa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .message.bot {
+            background: #667eea;
+            color: white;
+            margin-right: auto;
+        }
+
+        .message.user {
+            background: #e3f2fd;
+            color: #333;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .chat-input input:focus {
+            border-color: #667eea;
+        }
+
+        .chat-input button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            background: #5a6fd8;
+        }
+
+        .cart {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .cart h4 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .cart-total {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #667eea;
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        .order-btn {
+            width: 100%;
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .order-btn:hover {
+            background: #45a049;
+        }
+
+        .quick-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .quick-btn {
+            background: #f0f0f0;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .quick-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .menu-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .menu-item img {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🍽️ Delicious Bites</h1>
+        <p>Scan, Browse, Order - Your Smart Dining Experience</p>
+    </div>
+
+    <div class="container">
+        <div class="menu-section">
+            <div class="category">
+                <h2>🍕 Main Dishes</h2>
+                <div class="menu-item" onclick="addToCart('Margherita Pizza', 12.99)">
+                    <img src="https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=200&h=200&fit=crop" alt="Margherita Pizza">
+                    <div class="item-info">
+                        <div class="item-name">Margherita Pizza</div>
+                        <div class="item-description">Fresh tomatoes, mozzarella cheese, and basil on crispy crust</div>
+                        <div class="item-tags">
+                            <span class="tag vegetarian">Vegetarian</span>
+                            <span class="tag popular">Popular</span>
+                        </div>
+                        <div class="item-price">$12.99</div>
+                    </div>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+
+                <div class="menu-item" onclick="addToCart('Spicy Chicken Wings', 9.99)">
+                    <img src="https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=200&h=200&fit=crop" alt="Chicken Wings">
+                    <div class="item-info">
+                        <div class="item-name">Spicy Chicken Wings</div>
+                        <div class="item-description">Crispy wings tossed in our signature hot sauce</div>
+                        <div class="item-tags">
+                            <span class="tag spicy">Spicy</span>
+                            <span class="tag popular">Popular</span>
+                        </div>
+                        <div class="item-price">$9.99</div>
+                    </div>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+
+                <div class="menu-item" onclick="addToCart('Grilled Salmon', 18.99)">
+                    <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=200&h=200&fit=crop" alt="Grilled Salmon">
+                    <div class="item-info">
+                        <div class="item-name">Grilled Salmon</div>
+                        <div class="item-description">Fresh Atlantic salmon with lemon herbs and vegetables</div>
+                        <div class="item-tags">
+                            <span class="tag healthy">Healthy</span>
+                        </div>
+                        <div class="item-price">$18.99</div>
+                    </div>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="category">
+                <h2>🥗 Salads & Appetizers</h2>
+                <div class="menu-item" onclick="addToCart('Caesar Salad', 8.99)">
+                    <img src="https://images.unsplash.com/photo-1551248429-40975aa4de74?w=200&h=200&fit=crop" alt="Caesar Salad">
+                    <div class="item-info">
+                        <div class="item-name">Caesar Salad</div>
+                        <div class="item-description">Crisp romaine lettuce with parmesan and croutons</div>
+                        <div class="item-tags">
+                            <span class="tag vegetarian">Vegetarian</span>
+                            <span class="tag healthy">Healthy</span>
+                        </div>
+                        <div class="item-price">$8.99</div>
+                    </div>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+
+                <div class="menu-item" onclick="addToCart('Loaded Nachos', 11.99)">
+                    <img src="https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=200&h=200&fit=crop" alt="Loaded Nachos">
+                    <div class="item-info">
+                        <div class="item-name">Loaded Nachos</div>
+                        <div class="item-description">Crispy tortilla chips with cheese, jalapeños, and sour cream</div>
+                        <div class="item-tags">
+                            <span class="tag spicy">Spicy</span>
+                            <span class="tag vegetarian">Vegetarian</span>
+                        </div>
+                        <div class="item-price">$11.99</div>
+                    </div>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="category">
+                <h2>🍰 Desserts</h2>
+                <div class="menu-item" onclick="addToCart('Chocolate Cake', 6.99)">
+                    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=200&h=200&fit=crop" alt="Chocolate Cake">
+                    <div class="item-info">
+                        <div class="item-name">Chocolate Cake</div>
+                        <div class="item-description">Rich chocolate cake with creamy frosting</div>
+                        <div class="item-tags">
+                            <span class="tag vegetarian">Vegetarian</span>
+                            <span class="tag popular">Popular</span>
+                        </div>
+                        <div class="item-price">$6.99</div>
+                    </div>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="chatbot-container">
+            <div class="chatbot-header">
+                <h3>🤖 AI Menu Assistant</h3>
+                <p style="color: #666; font-size: 0.9em;">Ask me about our menu!</p>
+            </div>
+
+            <div class="quick-buttons">
+                <button class="quick-btn" onclick="sendQuickMessage('Show me spicy food')">🌶️ Spicy</button>
+                <button class="quick-btn" onclick="sendQuickMessage('Vegetarian options')">🥬 Vegetarian</button>
+                <button class="quick-btn" onclick="sendQuickMessage('Popular dishes')">⭐ Popular</button>
+                <button class="quick-btn" onclick="sendQuickMessage('Healthy options')">💚 Healthy</button>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    Hello! 👋 I'm your AI menu assistant. I can help you find the perfect dish based on your preferences. What would you like to know about our menu?
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Ask about our menu..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+
+            <div class="cart">
+                <h4>🛒 Your Order</h4>
+                <div id="cartItems">
+                    <p style="color: #666; text-align: center;">Your cart is empty</p>
+                </div>
+                <div class="cart-total" id="cartTotal">Total: $0.00</div>
+                <button class="order-btn" onclick="placeOrder()">Place Order 🚀</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let total = 0;
+
+        // Menu data for the chatbot
+        const menuData = {
+            'margherita pizza': { name: 'Margherita Pizza', price: 12.99, tags: ['vegetarian', 'popular'] },
+            'spicy chicken wings': { name: 'Spicy Chicken Wings', price: 9.99, tags: ['spicy', 'popular'] },
+            'grilled salmon': { name: 'Grilled Salmon', price: 18.99, tags: ['healthy'] },
+            'caesar salad': { name: 'Caesar Salad', price: 8.99, tags: ['vegetarian', 'healthy'] },
+            'loaded nachos': { name: 'Loaded Nachos', price: 11.99, tags: ['spicy', 'vegetarian'] },
+            'chocolate cake': { name: 'Chocolate Cake', price: 6.99, tags: ['vegetarian', 'popular'] }
+        };
+
+        function addToCart(itemName, price) {
+            cart.push({ name: itemName, price: price });
+            total += price;
+            updateCart();
+            
+            // Add bot message
+            addBotMessage(`Great choice! I've added ${itemName} to your cart. Anything else you'd like to try? 😊`);
+        }
+
+        function updateCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="color: #666; text-align: center;">Your cart is empty</p>';
+            } else {
+                cartItems.innerHTML = cart.map((item, index) => 
+                    `<div class="cart-item">
+                        <span>${item.name}</span>
+                        <span>$${item.price.toFixed(2)}</span>
+                    </div>`
+                ).join('');
+            }
+
+            cartTotal.textContent = `Total: $${total.toFixed(2)}`;
+        }
+
+        function placeOrder() {
+            if (cart.length === 0) {
+                addBotMessage("Your cart is empty! Let me help you find something delicious to order. 🍽️");
+                return;
+            }
+
+            addBotMessage(`Perfect! Your order for $${total.toFixed(2)} has been placed. 🎉 Expected preparation time: 15-20 minutes. Thank you for dining with us!`);
+            
+            // Clear cart
+            cart = [];
+            total = 0;
+            updateCart();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addUserMessage(message);
+                input.value = '';
+                
+                // Process the message
+                setTimeout(() => {
+                    processUserMessage(message.toLowerCase());
+                }, 500);
+            }
+        }
+
+        function sendQuickMessage(message) {
+            addUserMessage(message);
+            setTimeout(() => {
+                processUserMessage(message.toLowerCase());
+            }, 500);
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function addUserMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.textContent = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addBotMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.textContent = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function processUserMessage(message) {
+            let response = "";
+
+            if (message.includes('spicy') || message.includes('hot')) {
+                response = "🌶️ Our spicy options include: Spicy Chicken Wings ($9.99) and Loaded Nachos ($11.99). Both are customer favorites! Which one sounds good to you?";
+            } else if (message.includes('vegetarian') || message.includes('veggie')) {
+                response = "🥬 Our vegetarian dishes are: Margherita Pizza ($12.99), Caesar Salad ($8.99), Loaded Nachos ($11.99), and Chocolate Cake ($6.99). All are delicious and meat-free!";
+            } else if (message.includes('popular') || message.includes('favorite') || message.includes('recommend')) {
+                response = "⭐ Our most popular dishes are: Margherita Pizza ($12.99), Spicy Chicken Wings ($9.99), and Chocolate Cake ($6.99). These are what most customers love!";
+            } else if (message.includes('healthy') || message.includes('light')) {
+                response = "💚 For healthy options, try our Grilled Salmon ($18.99) or Caesar Salad ($8.99). Both are nutritious and delicious!";
+            } else if (message.includes('price') || message.includes('cheap') || message.includes('expensive')) {
+                response = "💰 Our prices range from $6.99 (Chocolate Cake) to $18.99 (Grilled Salmon). Most dishes are between $8-13. What's your budget range?";
+            } else if (message.includes('salmon')) {
+                response = "🐟 Our Grilled Salmon ($18.99) is fresh Atlantic salmon with lemon herbs and vegetables. It's a healthy and flavorful choice!";
+            } else if (message.includes('pizza')) {
+                response = "🍕 We have Margherita Pizza ($12.99) with fresh tomatoes, mozzarella cheese, and basil. It's vegetarian and very popular!";
+            } else if (message.includes('dessert') || message.includes('sweet')) {
+                response = "🍰 For dessert, we have our delicious Chocolate Cake ($6.99) - rich chocolate cake with creamy frosting. Perfect way to end your meal!";
+            } else if (message.includes('hello') || message.includes('hi')) {
+                response = "Hello! 👋 I'm here to help you explore our menu. You can ask me about spicy food, vegetarian options, popular dishes, or anything else!";
+            } else if (message.includes('thank')) {
+                response = "You're very welcome! 😊 Is there anything else I can help you with today?";
+            } else {
+                response = "I'd be happy to help! You can ask me about: 🌶️ Spicy dishes, 🥬 Vegetarian options, ⭐ Popular items, 💚 Healthy choices, or specific dishes. What interests you?";
+            }
+
+            addBotMessage(response);
+        }
+
+        // Initialize the chat
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCart();
+        });
+    </script>
+</body>
+</html>
