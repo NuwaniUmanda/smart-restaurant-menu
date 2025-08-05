@@ -303,6 +303,93 @@
             color: white;
         }
 
+        /* Search Bar Styles */
+        .search-container {
+            margin-bottom: 30px;
+        }
+
+        .search-bar {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 15px 50px 15px 50px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .search-bar input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            width: 20px;
+            height: 20px;
+            color: #666;
+            z-index: 1;
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 15px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+
+        .clear-search:hover {
+            color: #333;
+        }
+
+        .clear-search svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .search-results {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .no-results .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .no-results h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .menu-item.hidden {
+            display: none;
+        }
+
+        .category.hidden {
+            display: none;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -334,6 +421,22 @@
 
     <div class="container">
         <div class="menu-section">
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-bar">
+                    <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Search menu items, descriptions, or tags..." onkeyup="filterMenu()">
+                    <button class="clear-search" id="clearSearch" onclick="clearSearch()" style="display: none;">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div id="searchResults" class="search-results"></div>
+            </div>
+
             <div class="category">
                 <h2>🍕 Main Dishes</h2>
                 <div class="menu-item" onclick="addToCart('Margherita Pizza', 12.99)">
@@ -592,6 +695,122 @@
 
             addBotMessage(response);
         }
+
+        // Search functionality
+        function filterMenu() {
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const clearButton = document.getElementById('clearSearch');
+            const searchResults = document.getElementById('searchResults');
+            
+            // Show/hide clear button
+            clearButton.style.display = searchTerm ? 'block' : 'none';
+            
+            // Get all menu items and categories
+            const menuItems = document.querySelectorAll('.menu-item');
+            const categories = document.querySelectorAll('.category');
+            
+            let visibleItemsCount = 0;
+            let totalSearchResults = 0;
+            
+            if (!searchTerm) {
+                // Show all items and categories
+                menuItems.forEach(item => {
+                    item.classList.remove('hidden');
+                    visibleItemsCount++;
+                });
+                categories.forEach(category => category.classList.remove('hidden'));
+                searchResults.innerHTML = '';
+                removeNoResultsMessage();
+                return;
+            }
+            
+            // Hide all categories initially
+            categories.forEach(category => category.classList.add('hidden'));
+            
+            // Filter items
+            menuItems.forEach(item => {
+                const itemName = item.querySelector('.item-name').textContent.toLowerCase();
+                const itemDescription = item.querySelector('.item-description').textContent.toLowerCase();
+                
+                // Get tags from menu data
+                const itemNameKey = itemName.replace(/\s+/g, ' ').trim();
+                let itemTags = [];
+                for (const [key, value] of Object.entries(menuData)) {
+                    if (key.includes(itemNameKey.split(' ')[0]) || itemNameKey.includes(key.split(' ')[0])) {
+                        itemTags = value.tags || [];
+                        break;
+                    }
+                }
+                
+                const tagsText = itemTags.join(' ').toLowerCase();
+                
+                if (itemName.includes(searchTerm) || 
+                    itemDescription.includes(searchTerm) || 
+                    tagsText.includes(searchTerm)) {
+                    item.classList.remove('hidden');
+                    // Show the parent category
+                    item.closest('.category').classList.remove('hidden');
+                    visibleItemsCount++;
+                    totalSearchResults++;
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+            
+            // Update search results text
+            if (totalSearchResults === 0) {
+                searchResults.innerHTML = `No items found for "${searchInput.value}"`;
+                showNoResultsMessage(searchInput.value);
+            } else {
+                searchResults.innerHTML = `${totalSearchResults} ${totalSearchResults === 1 ? 'item' : 'items'} found for "${searchInput.value}"`;
+                removeNoResultsMessage();
+            }
+        }
+        
+        function clearSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.value = '';
+            filterMenu();
+            searchInput.focus();
+        }
+        
+        function showNoResultsMessage(searchTerm) {
+            removeNoResultsMessage();
+            
+            const menuSection = document.querySelector('.menu-section');
+            const noResultsDiv = document.createElement('div');
+            noResultsDiv.className = 'no-results';
+            noResultsDiv.id = 'noResultsMessage';
+            noResultsDiv.innerHTML = `
+                <div class="icon">🔍</div>
+                <h3>No items found</h3>
+                <p>No menu items match "${searchTerm}". Try searching for something else!</p>
+            `;
+            
+            // Insert after search container
+            const searchContainer = document.querySelector('.search-container');
+            searchContainer.parentNode.insertBefore(noResultsDiv, searchContainer.nextSibling);
+        }
+        
+        function removeNoResultsMessage() {
+            const noResultsMessage = document.getElementById('noResultsMessage');
+            if (noResultsMessage) {
+                noResultsMessage.remove();
+            }
+        }
+        
+        // Add Enter key support for search
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        filterMenu();
+                    }
+                });
+            }
+        });
 
         // Initialize the chat
         document.addEventListener('DOMContentLoaded', function() {

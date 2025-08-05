@@ -33,6 +33,30 @@ function App() {
       description: "Juicy beef burger with cheese and lettuce.",
       tags: ["popular"],
     },
+    {
+      id: 4,
+      name: "Margherita Pizza",
+      price: 14.99,
+      image: "🍕",
+      description: "Fresh tomatoes, mozzarella cheese, and basil on crispy crust.",
+      tags: ["vegetarian", "popular"],
+    },
+    {
+      id: 5,
+      name: "Grilled Salmon",
+      price: 18.99,
+      image: "🐟",
+      description: "Fresh Atlantic salmon with lemon herbs and vegetables.",
+      tags: ["healthy", "seafood"],
+    },
+    {
+      id: 6,
+      name: "Caesar Salad",
+      price: 8.99,
+      image: "🥬",
+      description: "Crisp romaine lettuce with parmesan and croutons.",
+      tags: ["vegetarian", "healthy"],
+    },
   ];
 
   // Cart operations
