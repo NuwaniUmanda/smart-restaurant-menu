@@ -37,6 +37,85 @@
             opacity: 0.9;
         }
 
+        .search-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            outline: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            background: white;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .search-bar input::placeholder {
+            color: #999;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            color: #667eea;
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            color: #999;
+            cursor: pointer;
+            display: none;
+        }
+
+        .clear-search:hover {
+            color: #667eea;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 50px 20px;
+            color: white;
+        }
+
+        .no-results h3 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .no-results p {
+            font-size: 1.1em;
+            opacity: 0.6;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -332,6 +411,14 @@
         <p>Scan, Browse, Order - Your Smart Dining Experience</p>
     </div>
 
+    <div class="search-container">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search for dishes, ingredients, or tags..." oninput="filterMenu()">
+            <button class="clear-search" id="clearSearch" onclick="clearSearch()">✕</button>
+            <span class="search-icon">🔍</span>
+        </div>
+    </div>
+
     <div class="container">
         <div class="menu-section">
             <div class="category">
@@ -515,6 +602,69 @@
             cart = [];
             total = 0;
             updateCart();
+        }
+
+        // Search functionality
+        function filterMenu() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const clearButton = document.getElementById('clearSearch');
+            const menuItems = document.querySelectorAll('.menu-item');
+            const categories = document.querySelectorAll('.category');
+            let hasVisibleItems = false;
+
+            // Show/hide clear button
+            clearButton.style.display = searchTerm ? 'block' : 'none';
+
+            // Filter menu items
+            menuItems.forEach(item => {
+                const itemName = item.querySelector('.item-name').textContent.toLowerCase();
+                const itemDescription = item.querySelector('.item-description').textContent.toLowerCase();
+                const itemTags = Array.from(item.querySelectorAll('.tag')).map(tag => tag.textContent.toLowerCase());
+                
+                const matches = itemName.includes(searchTerm) || 
+                               itemDescription.includes(searchTerm) || 
+                               itemTags.some(tag => tag.includes(searchTerm));
+
+                if (matches) {
+                    item.style.display = 'flex';
+                    hasVisibleItems = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // Show/hide categories based on visible items
+            categories.forEach(category => {
+                const visibleItems = category.querySelectorAll('.menu-item[style*="flex"]');
+                if (visibleItems.length > 0 || !searchTerm) {
+                    category.style.display = 'block';
+                } else {
+                    category.style.display = 'none';
+                }
+            });
+
+            // Show no results message
+            let noResultsDiv = document.getElementById('noResults');
+            if (!hasVisibleItems && searchTerm) {
+                if (!noResultsDiv) {
+                    noResultsDiv = document.createElement('div');
+                    noResultsDiv.id = 'noResults';
+                    noResultsDiv.className = 'no-results';
+                    noResultsDiv.innerHTML = `
+                        <h3>🔍 No dishes found</h3>
+                        <p>Try searching for something else or browse our full menu</p>
+                    `;
+                    document.querySelector('.menu-section').appendChild(noResultsDiv);
+                }
+                noResultsDiv.style.display = 'block';
+            } else if (noResultsDiv) {
+                noResultsDiv.style.display = 'none';
+            }
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            filterMenu();
         }
 
         function sendMessage() {
