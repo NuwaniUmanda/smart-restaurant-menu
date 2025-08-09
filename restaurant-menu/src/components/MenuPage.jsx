@@ -54,7 +54,7 @@ const MenuPage = ({ onBack, onCart, onAddToCart }) => (
         </div>
       ))}
     </main>
-    <button className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-orange-600 text-white px-8 py-3 rounded-full shadow-lg hover:bg-orange-700 transition-all">
+    <button onClick={onCart} className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-orange-600 text-white px-8 py-3 rounded-full shadow-lg hover:bg-orange-700 transition-all">
       Place Order
     </button>
   </div>
