@@ -49,13 +49,14 @@ function App() {
   };
 
   const updateQuantity = (id, change) => {
-    setCart((prev) =>
-      prev
+    setCart((prev) => {
+      const updated = prev
         .map((item) =>
-          item.id === id ? { ...item, qty: Math.max(1, item.qty + change) } : item
+          item.id === id ? { ...item, qty: item.qty + change } : item
         )
-        .filter((item) => item.qty > 0)
-    );
+        .filter((item) => item.qty > 0);
+      return updated;
+    });
   };
 
   const removeFromCart = (id) => {
