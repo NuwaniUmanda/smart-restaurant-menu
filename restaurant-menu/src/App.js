@@ -1,95 +1,136 @@
-import React, { useState } from "react";
-import WelcomePage from "./components/WelcomePage";
-import MenuPage from "./components/MenuPage";
-import CartPage from "./components/CartPage";
+import React, { useState, useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './services/firebase';
+import { MenuProvider } from './MenuContext';
+import { CartProvider } from './CartContext';
+import ErrorBoundary from './components/ErrorBoundary';
+import MenuPage from './components/MenuPage';
+import CartPage from './components/CartPage';
+import AdminDashboard from './components/AdminDashboard';
+import AdminLogin from './components/AdminLogin';
+
+function LoadingFallback() {
+  return (
+    <div className="flex items-center justify-center h-screen bg-gradient-to-br from-gray-900 to-black">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-600 border-t-transparent mx-auto mb-4"></div>
+        <p className="text-white text-lg">Loading Smart Restaurant...</p>
+      </div>
+    </div>
+  );
+}
 
 function App() {
-  const [currentPage, setCurrentPage] = useState("welcome");
-  const [cart, setCart] = useState([]);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState('menu'); // 'menu', 'cart', 'admin-login', 'admin-dashboard'
 
-  // Sample menu data (should match MenuPage for now)
-  const sampleMenu = [
-    {
-      id: 1,
-      name: "Spicy Ramen",
-      price: 12.99,
-      image: "🍜",
-      description: "Hot and flavorful ramen with chili oil.",
-      tags: ["spicy", "popular"],
-    },
-    {
-      id: 2,
-      name: "Veggie Delight",
-      price: 9.99,
-      image: "🥗",
-      description: "Fresh salad with seasonal vegetables.",
-      tags: ["vegetarian", "healthy"],
-    },
-    {
-      id: 3,
-      name: "Classic Burger",
-      price: 10.99,
-      image: "🍔",
-      description: "Juicy beef burger with cheese and lettuce.",
-      tags: ["popular"],
-    },
-  ];
+  useEffect(() => {
+    try {
+      const unsubscribe = onAuthStateChanged(
+        auth, 
+        (currentUser) => {
+          console.log('Auth state changed:', currentUser ? 'User logged in' : 'No user');
+          setUser(currentUser);
+          setLoading(false);
+          
+          // If user is logged in and trying to access admin login, redirect to dashboard
+          if (currentUser && currentPage === 'admin-login') {
+            setCurrentPage('admin-dashboard');
+          }
+        },
+        (error) => {
+          console.error('Auth error:', error);
+          setError(error.message);
+          setLoading(false);
+        }
+      );
+      return () => unsubscribe();
+    } catch (err) {
+      console.error('Firebase setup error:', err);
+      setError(err.message);
+      setLoading(false);
+    }
+  }, [currentPage]);
 
-  // Cart operations
-  const addToCart = (item) => {
-    setCart((prev) => {
-      const found = prev.find((i) => i.id === item.id);
-      if (found) {
-        return prev.map((i) =>
-          i.id === item.id ? { ...i, qty: i.qty + 1 } : i
-        );
-      }
-      return [...prev, { ...item, qty: 1 }];
-    });
+  const handleNavigateToCart = () => {
+    setCurrentPage('cart');
   };
 
-  const updateQuantity = (id, change) => {
-    setCart((prev) =>
-      prev
-        .map((item) =>
-          item.id === id ? { ...item, qty: Math.max(1, item.qty + change) } : item
-        )
-        .filter((item) => item.qty > 0)
+  const handleNavigateToMenu = () => {
+    setCurrentPage('menu');
+  };
+
+  const handleNavigateToAdminLogin = () => {
+    if (user) {
+      setCurrentPage('admin-dashboard');
+    } else {
+      setCurrentPage('admin-login');
+    }
+  };
+
+  const handleAdminLogin = () => {
+    setCurrentPage('admin-dashboard');
+  };
+
+  const handleAdminLogout = () => {
+    setCurrentPage('menu');
+    setUser(null);
+  };
+
+  if (loading) {
+    return <LoadingFallback />;
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-gray-900 to-black">
+        <div className="text-center p-8 bg-red-900/20 rounded-lg border border-red-500">
+          <h2 className="text-red-500 text-xl font-bold mb-2">Error Loading App</h2>
+          <p className="text-white mb-2">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+          >
+            Reload App
+          </button>
+        </div>
+      </div>
     );
-  };
-
-  const removeFromCart = (id) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  const handleConfirmOrder = () => {
-    alert("Order confirmed! (Firebase integration coming soon)");
-    setCart([]);
-    setCurrentPage("welcome");
-  };
+  }
 
   return (
-    <div className="font-sans min-h-screen">
-      {currentPage === "welcome" && (
-        <WelcomePage onViewMenu={() => setCurrentPage("menu")} />
-      )}
-      {currentPage === "menu" && (
-        <MenuPage
-          onBack={() => setCurrentPage("welcome")}
-          onCart={() => setCurrentPage("cart")}
-          onAddToCart={addToCart}
-        />
-      )}
-      {currentPage === "cart" && (
-        <CartPage
-          cart={cart}
-          onBack={() => setCurrentPage("menu")}
-          onUpdateQty={updateQuantity}
-          onRemove={removeFromCart}
-          onConfirmOrder={handleConfirmOrder}
-        />
-      )}
-    </div>
+    <ErrorBoundary>
+      <MenuProvider>
+        <CartProvider>
+          <div className="font-sans min-h-screen">
+            {currentPage === 'menu' && (
+              <MenuPage 
+                onCart={handleNavigateToCart}
+                onAdmin={handleNavigateToAdminLogin}
+              />
+            )}
+            
+            {currentPage === 'cart' && (
+              <CartPage onBack={handleNavigateToMenu} />
+            )}
+            
+            {currentPage === 'admin-login' && (
+              <AdminLogin onLogin={handleAdminLogin} />
+            )}
+            
+            {currentPage === 'admin-dashboard' && user && (
+              <AdminDashboard onLogout={handleAdminLogout} />
+            )}
+            
+            {currentPage === 'admin-dashboard' && !user && (
+              <AdminLogin onLogin={handleAdminLogin} />
+            )}
+          </div>
+        </CartProvider>
+      </MenuProvider>
+    </ErrorBoundary>
   );
 }
 
