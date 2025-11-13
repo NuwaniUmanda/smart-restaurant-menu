@@ -1,8 +1,9 @@
 // Import order service for Firestore integration
 import * as orderService from './orderService';
+import config from '../config';
 
 // API base URL
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
+const API_BASE_URL = config.API_BASE_URL;
 
 // Helper function to get or create a guest user ID (session-based)
 const getGuestUserId = () => {

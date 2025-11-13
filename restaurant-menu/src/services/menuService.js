@@ -1,8 +1,9 @@
 import { auth } from "./firebase";
 import { handleError, retryWithBackoff } from "../utils/errorHandler";
+import config from '../config';
 
 // API base URL
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
+const API_BASE_URL = config.API_BASE_URL;
 
 // Predefined size options with structure for admin to set prices
 export const PREDEFINED_SIZE_OPTIONS = [

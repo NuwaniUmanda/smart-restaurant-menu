@@ -8,6 +8,7 @@ import './admin-dashboard.css';
 import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 import { db } from '../services/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
+import config from '../config';
 
 const AdminDashboard = ({ onLogout, onBack }) => {
 const { menu, addMenuItem, updateMenuItem, deleteMenuItem } = useMenu();
@@ -270,7 +271,7 @@ useEffect(() => {
 
 const handleCompleteOrder = async (orderId, paymentMethod = 'cash') => {
   try {
-    const response = await fetch(`http://localhost:4000/api/orders/${orderId}/complete`, {
+    const response = await fetch(`${config.API_BASE_URL}/api/orders/${orderId}/complete`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
