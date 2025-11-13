@@ -29,20 +29,34 @@ app.use(cors({
 }));
 
 if (!admin.apps.length) {
-  try {
-    const serviceAccount = require(path.join(__dirname, 'firebase-service-account.json'));
-    
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-      projectId: 'resturant-menu-eb399',
-      databaseURL: `https://resturant-menu-eb399.firebaseio.com`
-    });
-    
-    console.log('✅ Firebase Admin initialized successfully');
-  } catch (error) {
-    console.error('❌ Error initializing Firebase Admin:', error);
-    process.exit(1);
+  let serviceAccount;
+  
+  // Check if running on Render (production)
+  if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+    try {
+      serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+      console.log('✅ Using Firebase credentials from environment variable');
+    } catch (error) {
+      console.error('❌ Failed to parse FIREBASE_SERVICE_ACCOUNT:', error);
+      process.exit(1);
+    }
+  } else {
+    // Local development - use file
+    try {
+      serviceAccount = require('./firebase-service-account.json');
+      console.log('✅ Using Firebase credentials from local file');
+    } catch (error) {
+      console.error('❌ firebase-service-account.json not found');
+      process.exit(1);
+    }
   }
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    projectId: 'resturant-menu-eb399',
+  });
+  
+  console.log('✅ Firebase Admin initialized successfully');
 }
 
 // Socket.io connection handling - NOW io exists
