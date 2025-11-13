@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import * as cartService from './services/cartService';
-
+import config from './config';
 const CartContext = createContext();
 
 // Export the context so it can be imported elsewhere

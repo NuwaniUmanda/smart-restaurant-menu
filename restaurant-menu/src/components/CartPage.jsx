@@ -428,10 +428,13 @@ const handleSetTableNumber = async () => {
               <div className="space-y-4">
                 {cart.map(item => (
                   <div
-                    key={item.uniqueItemId || item.id}>
-                    className={`bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-4 shadow-sm transition-all duration-300 border border-gray-700 ${
-                      activeId === item.id ? 'ring-2 ring-red-500 bg-gradient-to-r from-red-900 to-red-800' : 'hover:shadow-md hover:border-red-500'
+                    key={item.uniqueItemId || item.id}
+                    className={`rounded-2xl p-4 shadow-sm transition-all duration-300 border border-gray-700 ${
+                      activeId === item.id 
+                        ? 'ring-2 ring-red-500 bg-gradient-to-r from-red-900 to-red-800' 
+                        : 'bg-gradient-to-r from-gray-800 to-gray-900 hover:shadow-md hover:border-red-500'
                     }`}
+                  >
                   
                     <div className="flex items-start gap-3 sm:gap-4">
                       
