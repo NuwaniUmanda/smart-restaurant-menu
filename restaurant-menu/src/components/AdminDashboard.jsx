@@ -374,44 +374,46 @@ const filteredMenu = menu.filter(item => {
       boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
       paddingBottom: '16px'
     }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+        <button 
+          onClick={onBack}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '8px 12px',
+            fontSize: '13px',
+            whiteSpace: 'nowrap',
+            background: 'rgba(75, 85, 99, 0.3)',
+            border: '1px solid rgba(156, 163, 175, 0.3)',
+            borderRadius: '10px',
+            color: '#d1d5db',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            flexShrink: 0
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(75, 85, 99, 0.5)';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(75, 85, 99, 0.3)';
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span className="btn-text">Back</span>
+        </button>
+
         <div style={{ flex: '1', minWidth: '200px' }}>
           <h1>Admin Dashboard</h1>
           <p>Manage your restaurant menu</p>
         </div>
         
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
-          <button 
-            onClick={onBack}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '8px 12px',
-              fontSize: '13px',
-              whiteSpace: 'nowrap',
-              background: 'rgba(75, 85, 99, 0.3)',
-              border: '1px solid rgba(156, 163, 175, 0.3)',
-              borderRadius: '10px',
-              color: '#d1d5db',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(75, 85, 99, 0.5)';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(75, 85, 99, 0.3)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
-            </svg>
-            <span className="btn-text">Back to Menu</span>
-          </button>
-
+          {/* REMOVE BACK BUTTON FROM HERE */}
           <button 
             onClick={() => setShowNotificationPanel(!showNotificationPanel)}
             style={{

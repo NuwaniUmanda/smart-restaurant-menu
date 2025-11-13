@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Chatbot.css';
 
 const Chatbot = () => {
   const messengerRef = useRef(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   useEffect(() => {
     // Load Dialogflow Messenger script
@@ -19,6 +20,13 @@ const Chatbot = () => {
         dfMessenger.setAttribute('chat-title', 'ChatBot');
         dfMessenger.setAttribute('agent-id', 'ecced5a0-7b8f-4be5-a151-ccba076a4c46');
         dfMessenger.setAttribute('language-code', 'en');
+        
+        // Add mobile-specific attributes
+        if (window.innerWidth <= 768) {
+          dfMessenger.style.width = '100%';
+          dfMessenger.style.height = '100%';
+        }
+        
         messengerRef.current.appendChild(dfMessenger);
       }
     };
@@ -31,7 +39,50 @@ const Chatbot = () => {
     };
   }, []);
 
-  return <div ref={messengerRef}></div>;
+  const toggleChat = () => {
+    setIsChatOpen(!isChatOpen);
+  };
+
+  const closeChat = () => {
+    setIsChatOpen(false);
+  };
+
+  return (
+    <>
+      {/* Chat toggle button */}
+      <button 
+        className="chatbot-toggle-btn" 
+        onClick={toggleChat}
+        aria-label="Open chat"
+      >
+        💬
+      </button>
+
+      {/* Overlay for mobile */}
+      {isChatOpen && window.innerWidth <= 768 && (
+        <div className="chatbot-overlay" onClick={closeChat}></div>
+      )}
+
+      {/* Chat container */}
+      {isChatOpen && (
+        <div className="chatbot-container">
+          <div className="chatbot-header">
+            <h3>Restaurant Assistant</h3>
+            <button 
+              className="chatbot-close-btn" 
+              onClick={closeChat}
+              aria-label="Close chat"
+            >
+              ×
+            </button>
+          </div>
+          <div className="chatbot-iframe-wrapper">
+            <div ref={messengerRef} style={{ width: '100%', height: '100%' }}></div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default Chatbot;

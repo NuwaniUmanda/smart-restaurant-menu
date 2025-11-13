@@ -270,8 +270,8 @@ const handleSetTableNumber = async () => {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              <span className="hidden sm:inline">Back to Menu</span>
-              <span className="sm:hidden">Back</span>
+              <span className="hidden sm:inline">Back</span>
+              <span className="sm:hidden"></span>
             </button>
             
             <div className="flex items-center gap-3">
