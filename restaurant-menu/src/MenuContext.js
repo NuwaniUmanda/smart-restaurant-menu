@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { auth } from './services/firebase';
 import { PREDEFINED_SIZE_OPTIONS, validateSizeOptions } from './services/menuService';
+import config from './config';
 
 const MenuContext = createContext();
 
@@ -15,8 +16,8 @@ export function MenuProvider({ children }) {
         setLoading(true);
         setError(null);
         
-        const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000';
-        
+        const baseUrl = config.API_BASE_URL; 
+
         // Public endpoint - no auth needed for fetching menu
         const response = await fetch(`${baseUrl}/api/menu-items`);
         
@@ -57,8 +58,8 @@ export function MenuProvider({ children }) {
       }
 
       const idToken = await user.getIdToken();
-      const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000';
-      
+      const baseUrl = config.API_BASE_URL;
+
       // Prepare menu item with proper structure
       const menuItemData = {
         name: newItem.name,
@@ -115,8 +116,8 @@ export function MenuProvider({ children }) {
       }
 
       const idToken = await user.getIdToken();
-      const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000';
-      
+      const baseUrl = config.API_BASE_URL;
+
       // Prepare updated data with proper structure
       const menuItemData = {
         ...updatedData,
@@ -165,8 +166,7 @@ export function MenuProvider({ children }) {
       }
 
       const idToken = await user.getIdToken();
-      const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000';
-      
+      const baseUrl = config.API_BASE_URL;
       const response = await fetch(`${baseUrl}/api/menu-items/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${idToken}` },

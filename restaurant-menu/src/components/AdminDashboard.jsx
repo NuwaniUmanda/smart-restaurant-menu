@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, Edit3, Trash2, Save, X, Search, Filter, LogOut, AlertCircle, CheckCircle, Bell } from 'lucide-react';
+import { Plus, Edit3, Trash2, Save, X, Search, Filter, LogOut, AlertCircle, CheckCircle, Bell, ArrowLeft } from 'lucide-react';
 import { io } from 'socket.io-client';
 import { useMenu } from '../MenuContext';
 import { signOut } from 'firebase/auth';
@@ -8,9 +8,10 @@ import './admin-dashboard.css';
 import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 import { db } from '../services/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
+import config from '../config';
 
-const AdminDashboard = ({ onLogout }) => {
-  const { menu, addMenuItem, updateMenuItem, deleteMenuItem } = useMenu();
+const AdminDashboard = ({ onLogout, onBack }) => {
+const { menu, addMenuItem, updateMenuItem, deleteMenuItem } = useMenu();
   
   // FORM STATE - COMPLETE OBJECT
   const [form, setForm] = useState({
@@ -270,7 +271,7 @@ useEffect(() => {
 
 const handleCompleteOrder = async (orderId, paymentMethod = 'cash') => {
   try {
-    const response = await fetch(`http://localhost:4000/api/orders/${orderId}/complete`, {
+    const response = await fetch(`${config.API_BASE_URL}/api/orders/${orderId}/complete`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
@@ -314,22 +315,36 @@ const handleCompleteOrder = async (orderId, paymentMethod = 'cash') => {
   }
 };
 
-  // EXISTING FUNCTIONS
-  const categories = ['All', ...new Set(menu.map(item => item.category).filter(Boolean))];
-  const allTags = ['All', ...new Set(menu.flatMap(item => Array.isArray(item.tags) ? item.tags : []))];
+  // EXISTING FUNCTIONS (around line 286)
+const normalizeCategory = (cat) => {
+  if (!cat) return '';
+  return cat.trim()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+};
 
-  const filteredMenu = menu.filter(item => {
-    const matchesSearch = !searchTerm || 
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-      item.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (Array.isArray(item.tags) && item.tags.some(tag => 
-        tag.toLowerCase().includes(searchTerm.toLowerCase())
-      ));
-    const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
-    const matchesTag = selectedTag === 'All' || (Array.isArray(item.tags) && item.tags.includes(selectedTag));
-    return matchesSearch && matchesCategory && matchesTag;
-  });
+const categories = ['All', ...new Set(
+  menu
+    .map(item => normalizeCategory(item.category))
+    .filter(Boolean)
+)].sort();
+
+const allTags = ['All', ...new Set(menu.flatMap(item => Array.isArray(item.tags) ? item.tags : []))];
+
+const filteredMenu = menu.filter(item => {
+  const matchesSearch = !searchTerm || 
+    item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    item.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (Array.isArray(item.tags) && item.tags.some(tag => 
+      tag.toLowerCase().includes(searchTerm.toLowerCase())
+    ));
+  const matchesCategory = selectedCategory === 'All' || 
+    normalizeCategory(item.category) === selectedCategory;
+  const matchesTag = selectedTag === 'All' || (Array.isArray(item.tags) && item.tags.includes(selectedTag));
+  return matchesSearch && matchesCategory && matchesTag;
+});
 
   const showSuccessMessage = (message) => {
     setSuccess(message);
@@ -366,6 +381,37 @@ const handleCompleteOrder = async (orderId, paymentMethod = 'cash') => {
         </div>
         
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
+          <button 
+            onClick={onBack}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '8px 12px',
+              fontSize: '13px',
+              whiteSpace: 'nowrap',
+              background: 'rgba(75, 85, 99, 0.3)',
+              border: '1px solid rgba(156, 163, 175, 0.3)',
+              borderRadius: '10px',
+              color: '#d1d5db',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(75, 85, 99, 0.5)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(75, 85, 99, 0.3)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span className="btn-text">Back to Menu</span>
+          </button>
+
           <button 
             onClick={() => setShowNotificationPanel(!showNotificationPanel)}
             style={{

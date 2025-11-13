@@ -121,7 +121,10 @@ function App() {
             )}
             
             {currentPage === 'admin-dashboard' && user && (
-              <AdminDashboard onLogout={handleAdminLogout} />
+              <AdminDashboard 
+                onLogout={handleAdminLogout}
+                onBack={handleNavigateToMenu}  
+              />
             )}
             
             {currentPage === 'admin-dashboard' && !user && (

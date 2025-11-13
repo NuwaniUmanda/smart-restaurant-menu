@@ -4,15 +4,21 @@ const cors = require('cors');
 const fetch = require('node-fetch');
 const http = require('http');
 const socketIo = require('socket.io');
-
+const path = require('path');
 const app = express();
 const server = http.createServer(app);
 
-// Socket.io setup - MUST be before using io
+// Define allowed origins for CORS
+const allowedOrigins = [
+  'http://localhost:3000',  // Local development
+  'https://smart-restaurant-menu-frontend.onrender.com'  // Production
+];
+
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"]
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
@@ -23,16 +29,51 @@ app.set('io', io);
 
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps, Postman, curl)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy does not allow access from the specified origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 
+
 if (!admin.apps.length) {
+  let serviceAccount;
+  
+  // Check if running on Render (production)
+  if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+    try {
+      serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+      console.log('✅ Using Firebase credentials from environment variable');
+    } catch (error) {
+      console.error('❌ Failed to parse FIREBASE_SERVICE_ACCOUNT:', error);
+      process.exit(1);
+    }
+  } else {
+    // Local development - use file
+    try {
+      serviceAccount = require('./firebase-service-account.json');
+      console.log('✅ Using Firebase credentials from local file');
+    } catch (error) {
+      console.error('❌ firebase-service-account.json not found');
+      process.exit(1);
+    }
+  }
+
   admin.initializeApp({
-    credential: admin.credential.cert(require('./firebase-service-account.json')),
+    credential: admin.credential.cert(serviceAccount),
     projectId: 'resturant-menu-eb399',
   });
+  
+  console.log('✅ Firebase Admin initialized successfully');
 }
 
 // Socket.io connection handling - NOW io exists

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { Bell, X, Clock, CheckCircle } from 'lucide-react';
+import config from '../config';
 
 const AdminNotifications = ({ adminId = 'admin1' }) => {
   const [notifications, setNotifications] = useState([]);
@@ -14,7 +15,7 @@ const AdminNotifications = ({ adminId = 'admin1' }) => {
 
   const fetchNotificationsFromDB = async () => {
     try {
-      const response = await fetch('http://localhost:4000/api/notifications/admin');
+      const response = await fetch(`${config.API_BASE_URL}/api/notifications/admin`);
       if (response.ok) {
         const data = await response.json();
         // Format the data to match expected format
@@ -42,7 +43,7 @@ const AdminNotifications = ({ adminId = 'admin1' }) => {
     try {
       // Only mark as read in database when explicitly confirmed
       if (notificationId) {
-        await fetch(`http://localhost:4000/api/notifications/${notificationId}/read`, {
+        await fetch(`${config.API_BASE_URL}/api/notifications/${notificationId}/read`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' }
         });
@@ -61,7 +62,7 @@ const AdminNotifications = ({ adminId = 'admin1' }) => {
   };
 
   useEffect(() => {
-    socketRef.current = io('http://localhost:4000', {
+    socketRef.current = io(config.API_BASE_URL, {
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
@@ -149,7 +150,7 @@ const AdminNotifications = ({ adminId = 'admin1' }) => {
   const clearAllNotifications = async () => {
     try {
       // Mark all as read in database
-      await fetch('http://localhost:4000/api/notifications/mark-all-read', {
+      await fetch(`${config.API_BASE_URL}/api/notifications/mark-all-read`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' }
       });
