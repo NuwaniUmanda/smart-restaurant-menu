@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Search, ShoppingCart, Settings, Shield, Menu, Plus, Minus, Filter } from 'lucide-react';
-import RestaurantChatbot from './RestaurantChatbot'; // ADD THIS LINE
 import { useMenu } from '../MenuContext';
 import { useCart } from '../CartContext';
 
@@ -203,17 +202,6 @@ const MenuPage = ({ onCart, onAdmin }) => {
     } finally {
       setAddingToCart(null);
     }
-  };
-
-  const handleChatbotCategorySelect = (categoryId) => {
-    setSelectedCategory(categoryId);
-    setMobileMenuOpen(false);
-    setTimeout(() => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    }, 100);
   };
 
   const getDisplayPrice = (item) => {
@@ -648,8 +636,6 @@ const MenuPage = ({ onCart, onAdmin }) => {
           </div>
         )}
       </main>
-
-      <RestaurantChatbot onCategorySelect={handleChatbotCategorySelect} />
 
       <style>{`
         @keyframes float {
