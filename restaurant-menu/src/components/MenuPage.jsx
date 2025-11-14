@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Search, ShoppingCart, Settings, Shield, Menu, Plus, Minus, Filter } from 'lucide-react';
+import RestaurantChatbot from './RestaurantChatbot'; // ADD THIS LINE
 import { useMenu } from '../MenuContext';
 import { useCart } from '../CartContext';
-import { setTableNumber, getTableNumber } from '../services/cartService';
 
 const MenuPage = ({ onCart, onAdmin }) => {
   const { menu } = useMenu();
@@ -203,6 +203,17 @@ const MenuPage = ({ onCart, onAdmin }) => {
     } finally {
       setAddingToCart(null);
     }
+  };
+
+  const handleChatbotCategorySelect = (categoryId) => {
+    setSelectedCategory(categoryId);
+    setMobileMenuOpen(false);
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }, 100);
   };
 
   const getDisplayPrice = (item) => {
@@ -571,16 +582,16 @@ const MenuPage = ({ onCart, onAdmin }) => {
           </div>
 
           {showFilters && (
-            <div className="pb-3 sm:pb-4 animate-slideDown">
-              <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 justify-center">
+            <div className="pb-2 animate-slideDown">
+              <div className="grid grid-cols-3 sm:flex sm:flex-wrap gap-1.5 justify-center">
                 {categories.map(category => (
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
-                    className={`px-3 py-2 sm:px-4 rounded-lg sm:rounded-xl transition-all border text-xs sm:text-sm ${
+                    className={`px-2 py-1 rounded text-[10px] sm:text-xs ${
                       selectedCategory === category
-                        ? "bg-red-600 text-white border-red-600 shadow-lg"
-                        : "bg-gray-800 text-gray-300 border-gray-700 hover:bg-red-600 hover:text-white hover:border-red-600"
+                        ? "bg-red-600 text-white border border-red-600"
+                        : "bg-gray-800 text-gray-300 border border-gray-700 hover:bg-red-600 hover:text-white"
                     }`}
                   >
                     {category}
@@ -637,6 +648,8 @@ const MenuPage = ({ onCart, onAdmin }) => {
           </div>
         )}
       </main>
+
+      <RestaurantChatbot onCategorySelect={handleChatbotCategorySelect} />
 
       <style>{`
         @keyframes float {
