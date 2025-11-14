@@ -59,8 +59,6 @@ const RestaurantChatbot = ({ onCategorySelect }) => {
     // Call the parent component's function to change category
     setTimeout(() => {
       onCategorySelect(category.id);
-      // Optionally close the chatbot after selection
-      // setIsOpen(false);
     }, 1000);
   };
 
@@ -168,181 +166,63 @@ const RestaurantChatbot = ({ onCategorySelect }) => {
   };
 
   return (
-    <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000 }}>
+    <div className="chatbot-container-wrapper">
       {/* Chat Toggle Button */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          style={{
-            width: '60px',
-            height: '60px',
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, #dc2626, #991b1b)',
-            border: 'none',
-            color: 'white',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 8px 25px rgba(220, 38, 38, 0.4)',
-            transition: 'all 0.3s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'scale(1.1)';
-            e.currentTarget.style.boxShadow = '0 12px 35px rgba(220, 38, 38, 0.5)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'scale(1)';
-            e.currentTarget.style.boxShadow = '0 8px 25px rgba(220, 38, 38, 0.4)';
-          }}
+          className="chat-toggle-button"
         >
-          <MessageCircle size={28} />
+          <MessageCircle size={24} className="chat-icon-desktop" />
+          <MessageCircle size={20} className="chat-icon-mobile" />
         </button>
       )}
 
       {/* Chat Window */}
       {isOpen && (
-        <div style={{
-          width: '380px',
-          height: '600px',
-          background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
-          borderRadius: '20px',
-          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-          border: '1px solid rgba(220, 38, 38, 0.3)',
-          animation: 'slideUp 0.3s ease-out'
-        }}>
+        <div className="chat-window">
           {/* Header */}
-          <div style={{
-            background: 'linear-gradient(135deg, #dc2626, #991b1b)',
-            padding: '20px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            color: 'white'
-          }}>
+          <div className="chat-header">
             <div>
-              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>
-                Menu Assistant
-              </h3>
-              <p style={{ margin: '4px 0 0 0', fontSize: '12px', opacity: 0.9 }}>
-                Here to help you explore
-              </p>
+              <h3 className="chat-title">Menu Assistant</h3>
+              <p className="chat-subtitle">Here to help you explore</p>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              style={{
-                background: 'rgba(255, 255, 255, 0.2)',
-                border: 'none',
-                borderRadius: '8px',
-                width: '32px',
-                height: '32px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                color: 'white',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
-              }}
+              className="chat-close-button"
             >
               <X size={20} />
             </button>
           </div>
 
           {/* Messages Area */}
-          <div style={{
-            flex: 1,
-            overflowY: 'auto',
-            padding: '20px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px'
-          }}>
+          <div className="chat-messages">
             {messages.map((msg, index) => (
               <div
                 key={index}
-                style={{
-                  display: 'flex',
-                  justifyContent: msg.type === 'user' ? 'flex-end' : 'flex-start'
-                }}
+                className={`message-wrapper ${msg.type === 'user' ? 'user' : 'bot'}`}
               >
-                <div style={{
-                  maxWidth: '75%',
-                  padding: '12px 16px',
-                  borderRadius: msg.type === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                  background: msg.type === 'user' 
-                    ? 'linear-gradient(135deg, #dc2626, #991b1b)'
-                    : 'rgba(255, 255, 255, 0.1)',
-                  color: 'white',
-                  fontSize: '14px',
-                  lineHeight: '1.5',
-                  whiteSpace: 'pre-line'
-                }}>
+                <div className={`message-bubble ${msg.type}`}>
                   {msg.text}
                 </div>
               </div>
             ))}
 
             {/* Category Buttons */}
-            <div style={{
-              background: 'rgba(255, 255, 255, 0.05)',
-              padding: '16px',
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 255, 255, 0.1)'
-            }}>
-              <p style={{ 
-                color: '#9ca3af', 
-                fontSize: '12px', 
-                margin: '0 0 12px 0',
-                textAlign: 'center',
-                fontWeight: '500'
-              }}>
-                Quick Access Categories
-              </p>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(2, 1fr)',
-                gap: '8px'
-              }}>
+            <div className="category-panel">
+              <p className="category-title">Quick Access Categories</p>
+              <div className="category-grid">
                 {categories.map((category) => (
                   <button
                     key={category.id}
                     onClick={() => handleCategoryClick(category)}
+                    className="category-button"
                     style={{
-                      padding: '10px',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      border: `1px solid ${category.color}40`,
-                      borderRadius: '10px',
-                      color: 'white',
-                      cursor: 'pointer',
-                      fontSize: '13px',
-                      fontWeight: '500',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      transition: 'all 0.3s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = `${category.color}20`;
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.borderColor = category.color;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.borderColor = `${category.color}40`;
+                      borderColor: `${category.color}40`
                     }}
                   >
-                    <span style={{ fontSize: '16px' }}>{category.emoji}</span>
-                    <span style={{ fontSize: '11px' }}>{category.name}</span>
+                    <span className="category-emoji">{category.emoji}</span>
+                    <span className="category-name">{category.name}</span>
                   </button>
                 ))}
               </div>
@@ -352,68 +232,275 @@ const RestaurantChatbot = ({ onCategorySelect }) => {
           </div>
 
           {/* Input Area */}
-          <div style={{
-            padding: '16px',
-            background: 'rgba(0, 0, 0, 0.3)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.1)'
-          }}>
-            <div style={{
-              display: 'flex',
-              gap: '8px',
-              alignItems: 'center'
-            }}>
-              <input
-                type="text"
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Ask about our menu..."
-                style={{
-                  flex: 1,
-                  padding: '12px 16px',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  borderRadius: '12px',
-                  color: 'white',
-                  fontSize: '14px',
-                  outline: 'none'
-                }}
-              />
-              <button
-                onClick={handleSendMessage}
-                disabled={!inputMessage.trim()}
-                style={{
-                  width: '44px',
-                  height: '44px',
-                  background: inputMessage.trim() 
-                    ? 'linear-gradient(135deg, #dc2626, #991b1b)'
-                    : 'rgba(156, 163, 175, 0.3)',
-                  border: 'none',
-                  borderRadius: '12px',
-                  color: 'white',
-                  cursor: inputMessage.trim() ? 'pointer' : 'not-allowed',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'all 0.3s ease'
-                }}
-                onMouseEnter={(e) => {
-                  if (inputMessage.trim()) {
-                    e.currentTarget.style.transform = 'scale(1.05)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                }}
-              >
-                <Send size={20} />
-              </button>
-            </div>
+          <div className="chat-input-area">
+            <input
+              type="text"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Ask about our menu..."
+              className="chat-input"
+            />
+            <button
+              onClick={handleSendMessage}
+              disabled={!inputMessage.trim()}
+              className={`chat-send-button ${inputMessage.trim() ? 'active' : 'disabled'}`}
+            >
+              <Send size={18} />
+            </button>
           </div>
         </div>
       )}
 
-      <style>{`
+      <style jsx>{`
+        .chatbot-container-wrapper {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          z-index: 1000;
+        }
+
+        /* Toggle Button */
+        .chat-toggle-button {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #dc2626, #991b1b);
+          border: none;
+          color: white;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+          transition: all 0.3s ease;
+        }
+
+        .chat-toggle-button:hover {
+          transform: scale(1.1);
+          box-shadow: 0 12px 35px rgba(220, 38, 38, 0.5);
+        }
+
+        .chat-icon-mobile {
+          display: none;
+        }
+
+        /* Chat Window - Desktop */
+        .chat-window {
+          width: 380px;
+          height: 600px;
+          background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+          border-radius: 20px;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          border: 1px solid rgba(220, 38, 38, 0.3);
+          animation: slideUp 0.3s ease-out;
+        }
+
+        /* Header */
+        .chat-header {
+          background: linear-gradient(135deg, #dc2626, #991b1b);
+          padding: 20px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          color: white;
+        }
+
+        .chat-title {
+          margin: 0;
+          font-size: 18px;
+          font-weight: bold;
+        }
+
+        .chat-subtitle {
+          margin: 4px 0 0 0;
+          font-size: 12px;
+          opacity: 0.9;
+        }
+
+        .chat-close-button {
+          background: rgba(255, 255, 255, 0.2);
+          border: none;
+          border-radius: 8px;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          color: white;
+          transition: all 0.3s ease;
+        }
+
+        .chat-close-button:hover {
+          background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Messages Area */
+        .chat-messages {
+          flex: 1;
+          overflow-y: auto;
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .message-wrapper {
+          display: flex;
+        }
+
+        .message-wrapper.user {
+          justify-content: flex-end;
+        }
+
+        .message-wrapper.bot {
+          justify-content: flex-start;
+        }
+
+        .message-bubble {
+          max-width: 75%;
+          padding: 12px 16px;
+          font-size: 14px;
+          line-height: 1.5;
+          white-space: pre-line;
+          color: white;
+        }
+
+        .message-bubble.user {
+          background: linear-gradient(135deg, #dc2626, #991b1b);
+          border-radius: 18px 18px 4px 18px;
+        }
+
+        .message-bubble.bot {
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 18px 18px 18px 4px;
+        }
+
+        /* Category Panel */
+        .category-panel {
+          background: rgba(255, 255, 255, 0.05);
+          padding: 16px;
+          border-radius: 12px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .category-title {
+          color: #9ca3af;
+          font-size: 12px;
+          margin: 0 0 12px 0;
+          text-align: center;
+          font-weight: 500;
+        }
+
+        .category-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 8px;
+        }
+
+        .category-button {
+          padding: 10px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid;
+          border-radius: 10px;
+          color: white;
+          cursor: pointer;
+          font-size: 13px;
+          font-weight: 500;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          transition: all 0.3s ease;
+        }
+
+        .category-button:hover {
+          background: rgba(255, 255, 255, 0.1);
+          transform: translateY(-2px);
+        }
+
+        .category-emoji {
+          font-size: 16px;
+        }
+
+        .category-name {
+          font-size: 11px;
+        }
+
+        /* Input Area */
+        .chat-input-area {
+          padding: 16px;
+          background: rgba(0, 0, 0, 0.3);
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          display: flex;
+          gap: 8px;
+          align-items: center;
+        }
+
+        .chat-input {
+          flex: 1;
+          padding: 12px 16px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
+          color: white;
+          font-size: 14px;
+          outline: none;
+        }
+
+        .chat-input::placeholder {
+          color: rgba(156, 163, 175, 0.7);
+        }
+
+        .chat-send-button {
+          width: 44px;
+          height: 44px;
+          border: none;
+          border-radius: 12px;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s ease;
+        }
+
+        .chat-send-button.active {
+          background: linear-gradient(135deg, #dc2626, #991b1b);
+          cursor: pointer;
+        }
+
+        .chat-send-button.active:hover {
+          transform: scale(1.05);
+        }
+
+        .chat-send-button.disabled {
+          background: rgba(156, 163, 175, 0.3);
+          cursor: not-allowed;
+        }
+
+        /* Scrollbar */
+        .chat-messages::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 10px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+          background: rgba(220, 38, 38, 0.5);
+          border-radius: 10px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+          background: rgba(220, 38, 38, 0.7);
+        }
+
+        /* Animations */
         @keyframes slideUp {
           from {
             opacity: 0;
@@ -425,28 +512,138 @@ const RestaurantChatbot = ({ onCategorySelect }) => {
           }
         }
 
-        /* Custom scrollbar */
-        div::-webkit-scrollbar {
-          width: 6px;
+        /* MOBILE RESPONSIVE - HALF SCREEN */
+        @media (max-width: 768px) {
+          .chatbot-container-wrapper {
+            bottom: 0;
+            right: 0;
+            left: 0;
+          }
+
+          .chat-toggle-button {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            width: 56px;
+            height: 56px;
+            z-index: 1001;
+          }
+
+          .chat-icon-desktop {
+            display: none;
+          }
+
+          .chat-icon-mobile {
+            display: block;
+          }
+
+          /* HALF SCREEN MOBILE */
+          .chat-window {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 50vh; /* HALF SCREEN */
+            max-height: 50vh;
+            border-radius: 20px 20px 0 0;
+            animation: slideUpMobile 0.3s ease-out;
+          }
+
+          .chat-header {
+            padding: 16px;
+          }
+
+          .chat-title {
+            font-size: 16px;
+          }
+
+          .chat-subtitle {
+            font-size: 11px;
+          }
+
+          .chat-messages {
+            padding: 12px;
+            gap: 10px;
+          }
+
+          .message-bubble {
+            font-size: 13px;
+            padding: 10px 14px;
+            max-width: 85%;
+          }
+
+          .category-panel {
+            padding: 12px;
+          }
+
+          .category-title {
+            font-size: 11px;
+            margin-bottom: 10px;
+          }
+
+          .category-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+          }
+
+          .category-button {
+            padding: 8px;
+            font-size: 12px;
+          }
+
+          .category-emoji {
+            font-size: 14px;
+          }
+
+          .category-name {
+            font-size: 10px;
+          }
+
+          .chat-input-area {
+            padding: 12px;
+          }
+
+          .chat-input {
+            padding: 10px 14px;
+            font-size: 13px;
+          }
+
+          .chat-send-button {
+            width: 40px;
+            height: 40px;
+          }
+
+          @keyframes slideUpMobile {
+            from {
+              opacity: 0;
+              transform: translateY(100%);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
         }
 
-        div::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 10px;
-        }
-
-        div::-webkit-scrollbar-thumb {
-          background: rgba(220, 38, 38, 0.5);
-          border-radius: 10px;
-        }
-
-        div::-webkit-scrollbar-thumb:hover {
-          background: rgba(220, 38, 38, 0.7);
-        }
-
-        /* Mobile responsive */
+        /* SMALL MOBILE */
         @media (max-width: 480px) {
-          /* Chat window will adjust */
+          .chat-window {
+            height: 50vh; /* Keep half screen */
+          }
+
+          .category-grid {
+            gap: 5px;
+          }
+
+          .category-button {
+            padding: 6px;
+            gap: 4px;
+          }
+
+          .category-name {
+            font-size: 9px;
+          }
         }
       `}</style>
     </div>
