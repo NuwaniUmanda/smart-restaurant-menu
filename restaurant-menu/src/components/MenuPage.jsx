@@ -15,7 +15,6 @@ const MenuPage = ({ onCart, onAdmin }) => {
   const [selectedSizes, setSelectedSizes] = useState({});
   const [showFilters, setShowFilters] = useState(false);
   const [addingToCart, setAddingToCart] = useState(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showAdminButton, setShowAdminButton] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   
@@ -425,6 +424,7 @@ const MenuPage = ({ onCart, onAdmin }) => {
               </div>
             )}
           </div>
+
         </div>
       </div>
     </div>
@@ -513,15 +513,8 @@ const MenuPage = ({ onCart, onAdmin }) => {
             
             <div className="flex items-center gap-2 sm:gap-4">
               <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="sm:hidden flex items-center gap-1 px-2 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-all border border-gray-700"
-              >
-                <Filter size={18} />
-              </button>
-
-              <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="hidden sm:flex items-center gap-2 px-3 py-2 lg:px-4 bg-gray-800 text-white rounded-xl hover:bg-gray-700 transition-all border border-gray-700"
+                className="flex items-center gap-2 px-3 py-2 lg:px-4 bg-gray-800 text-white rounded-xl hover:bg-gray-700 transition-all border border-gray-700"
               >
                 <Filter size={16} className="lg:w-[18px] lg:h-[18px]" />
                 <span className="text-sm lg:text-base">Filters</span>
@@ -542,20 +535,6 @@ const MenuPage = ({ onCart, onAdmin }) => {
             </div>
           </div>
 
-          {mobileMenuOpen && (
-            <div className="sm:hidden pb-4 border-t border-gray-700 pt-4 animate-slideDown">
-              <button
-                onClick={() => {
-                  setShowFilters(!showFilters);
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-800 text-white rounded-xl hover:bg-gray-700 transition-all border border-gray-700 mb-3"
-              >
-                <Filter size={18} />
-                Filters
-              </button>
-            </div>
-          )}
 
           <div className="pb-3 sm:pb-4">
             <div className="relative max-w-xs sm:max-w-md mx-auto">
