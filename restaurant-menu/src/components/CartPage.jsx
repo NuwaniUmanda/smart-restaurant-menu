@@ -270,8 +270,8 @@ const handleSetTableNumber = async () => {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              <span className="hidden sm:inline">Back</span>
-              <span className="sm:hidden"></span>
+              <span className="hidden sm:inline">Back to Menu</span>
+              <span className="sm:hidden">Back</span>
             </button>
             
             <div className="flex items-center gap-3">
@@ -428,13 +428,10 @@ const handleSetTableNumber = async () => {
               <div className="space-y-4">
                 {cart.map(item => (
                   <div
-                    key={item.uniqueItemId || item.id}
-                    className={`rounded-2xl p-4 shadow-sm transition-all duration-300 border border-gray-700 ${
-                      activeId === item.id 
-                        ? 'ring-2 ring-red-500 bg-gradient-to-r from-red-900 to-red-800' 
-                        : 'bg-gradient-to-r from-gray-800 to-gray-900 hover:shadow-md hover:border-red-500'
+                    key={item.uniqueItemId || item.id}>
+                    className={`bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-4 shadow-sm transition-all duration-300 border border-gray-700 ${
+                      activeId === item.id ? 'ring-2 ring-red-500 bg-gradient-to-r from-red-900 to-red-800' : 'hover:shadow-md hover:border-red-500'
                     }`}
-                  >
                   
                     <div className="flex items-start gap-3 sm:gap-4">
                       
