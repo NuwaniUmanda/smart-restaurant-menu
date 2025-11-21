@@ -426,26 +426,21 @@ const handleSetTableNumber = async () => {
               </div>
               
               <div className="space-y-4">
-                {cart.map(item => (
-                  <div
-                    key={item.uniqueItemId || item.id}>
-                    className={`bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-4 shadow-sm transition-all duration-300 border border-gray-700 ${
-                      activeId === item.id ? 'ring-2 ring-red-500 bg-gradient-to-r from-red-900 to-red-800' : 'hover:shadow-md hover:border-red-500'
-                    }`}
-                  
-                    <div className="flex items-start gap-3 sm:gap-4">
-                      
-                      {/* Product Image */}
-                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-white flex items-center justify-center shadow-sm overflow-hidden flex-shrink-0">
+                  {cart.map(item => (
+                    <div
+                      key={item.uniqueItemId || item.id}
+                      className={`rounded-2xl p-4 shadow-sm transition-all duration-300 border border-gray-700 ${activeId === item.id ? 'ring-2 ring-red-500 bg-gradient-to-r from-red-900 to-red-800' : 'bg-gradient-to-r from-gray-800 to-gray-900 hover:shadow-md hover:border-red-500'}`}
+                    >
+                      <div className="flex items-start gap-3 sm:gap-4">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-xl bg-white flex items-center justify-center shadow-sm overflow-hidden flex-shrink-0">
                           {item.image ? (
                             <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
                           ) : (
-                            <span className="text-2xl sm:text-3xl">🍽</span>
+                            <span className="text-xl sm:text-2xl lg:text-3xl">🍽</span>
                           )}
                         </div>
-                      
-                      {/* Product Details */}
-                      <div className="flex-1">
+                        {/* Product Details */}
+                        <div className="flex-1">
                         <h3 className="font-semibold text-white text-lg mb-1">
                           {item.name}
                         </h3>
