@@ -724,7 +724,7 @@ const filteredMenu = menu.filter(item => {
       e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
     }}
     >
-      {/* CHANGE THIS: Remove inline width/height and use className instead */}
+      {}
       <div className="image-container">
         {item.image ? (
           <img 
