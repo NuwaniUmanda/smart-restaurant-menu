@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "smart-restaurant-menu-468914",
+  "private_key_id": "6d9806e9ed6b8e2a513b27a81749dbe23dc4e752",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCMwzgef2TEGRRZ\nY1Vk51dkYtdEvOOsE9ngWCzdc8UAhey9us4itxMhz6fyI+8ACicsg4PJERVMKI15\nKvU3ZTY7BZ0scenaKrtMgWwEOtkdwkTgXNPRTu0KSvDxACuXME0+mfPVBkMNmcmi\nqd7XFfGnQawkBPaVLvM2VcWq8S5rOlw4hW/s17AEuzOg37Z3vshyGWIpCarkFZit\n/xe+2tFvkLkO2A50s+eArHpSimag7GLC5vLsDYeU6cfBHmjlVV5YlHmZOc3V5gB3\n3N5GgIqPh9HD5Ws/1Q96i9S+AEQhtp6C1GAnc+I/+giGW4PYiBcfI5TRTtxNuahV\nbUHVPqMjAgMBAAECggEAD4PO8jGZcjHPd+DGf0YucD6iuo1VTNitSZh+bXQ+sQWR\n6AGoidQC9FWWjc5fH/J+id3/DxDmd4v6t/G/sHjj5tKCFe2CWI0gMtkLBlZUKv8I\nJ3Cj2iyoXNuQvgeGRnZI9U7zvLWhe2TJgDfX+34MMiK/bgLsCNpxbTo7/NDzjFbr\nBFlceSc6m0++Ecb8UTHwIr90sVZ51fhung3fXFFx9kDRAuOxaTctdj/5u5oziLZk\n+9JE1SvbPqZU1Sx4801KSe8tDyhG2f+g74OEv0rsRIZeGW/8BtkC2Jqk76JsTvSI\nyAyU5AaeVKzqIWzO9RZeELMhzzGFgPPudOU5JhBQiQKBgQDF1tKc5v/Hj0vx1+14\nfXtT0ZUvehFavFqwWah77Hq8vLSRqmScHA/eEUcP36UgJwjBdBjFNM3bs+6snlDz\ngS9jmec8yFBb8KbaI+JcGS2C4VEk6PbxaqHH67J8HuBgriZxynfAJ9+Hny8TXRDP\nUSNdxHs/XtAeUSMdTSzItkBO2QKBgQC2JN7LNTOeBAzPJ2jJAHliI3apfDtXbBoU\nBv26fP1jeXkSgtDR8tYpCEk5WBZxfEiuE4XyVqIFIks8d4vWU8jJfj+NJX63pi6e\njYROp3Y8xXUUmDsQEYSEwjOlRKbK3Eag6ChITG45zOOYYqdHQPH225Ap2Ds0Vs11\n3PAck838WwKBgFxa9qLsa0c7q9ZQWLlAysvMMPqi32seNq/Qiwie0oU9CoZdpu4B\nY57lLelJHAqwbjPxAIc/KUKA8tB+b4fdLMQwWnRThsAEzb9TtR4NWuOYT4sNfgoh\nHzj23LF4sIIxihzgyZpYgs8LDqzZazl8xSfGy0o/9qPQeLX7Cwb/nXGxAoGAIGJF\nylNXLg0CSgJzuuj+q9gqTM/trQlnSZBEpFd8pab/Q69GeU13jiwO+McUlnDGa0zF\nT+TfQZJrVgDbN+wFku2DVxEHipddSotWrrVPbFafDl5SgfTbXs84Z3XhQcgQNqOQ\nJeqQ3m3zOTCxFRYS7xTyeL4dKJ0WQpJZjnso8GkCgYA1LAKwBBubkU6Ld3xHngFf\nNCL3A3t1gSWX7vmRLss2JKI+cdT81c5qZgQUe0jTriqxL5OohCDEDzz5TSnbd8BK\nAtWCSl4i2Pf+22cS+9LmUKJzL9JABELk5t81tp0clmy5PcjJShTuQ7lJjC4HcQHy\n9i5dQjGOeYYk2+CeK5JeuA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "restaurant-chatbot-service@smart-restaurant-menu-468914.iam.gserviceaccount.com",
+  "client_id": "117449553442496872597",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/restaurant-chatbot-service%40smart-restaurant-menu-468914.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
