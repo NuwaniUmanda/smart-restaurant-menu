@@ -3,11 +3,7 @@ import * as cartService from './services/cartService';
 import config from './config';
 const CartContext = createContext();
 
-<<<<<<< HEAD
 // Export the context
-=======
-// Export the context so it can be imported elsewhere
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export { CartContext };
 
 export function CartProvider({ children }) {
@@ -56,11 +52,7 @@ export function CartProvider({ children }) {
         ? `${menuItem.id}_${menuItem.selectedSize.code}` 
         : menuItem.id;
       
-<<<<<<< HEAD
       // Check if item with this exact size already exists in cart before calling backend
-=======
-      // Check if item with this exact size already exists in cart BEFORE calling backend
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
       const existingItemIndex = cart.findIndex(item => {
         const cartItemUniqueId = item.selectedSize 
           ? `${item.menuItemId || item.id}_${item.selectedSize.code}` 
@@ -214,11 +206,7 @@ export function CartProvider({ children }) {
         tableNumber,
         items: cart.map(item => ({
           ...item,
-<<<<<<< HEAD
           // Ensure having the display name for the order
-=======
-          // Ensure we have the display name for the order
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
           displayName: item.displayName || item.name
         }))
       };
@@ -275,11 +263,7 @@ export function CartProvider({ children }) {
     getCartItemCount,
     getTableNumber,
     validateTableNumbers,
-<<<<<<< HEAD
     loadCart 
-=======
-    loadCart // In case you need to manually reload cart
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
   };
 
   return (

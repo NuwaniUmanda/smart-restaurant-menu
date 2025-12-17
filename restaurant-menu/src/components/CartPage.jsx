@@ -318,15 +318,7 @@ const CartPage = ({ onBack }) => {
                   {cart.map(item => (
                     <div
                       key={item.uniqueItemId || item.id}
-<<<<<<< HEAD
                       className={`rounded-2xl p-4 shadow-sm transition-all duration-300 border border-gray-700 ${activeId === item.id ? 'ring-2 ring-red-500 bg-gradient-to-r from-red-900 to-red-800' : 'bg-gradient-to-r from-gray-800 to-gray-900 hover:shadow-md hover:border-red-500'}`}
-=======
-                      className={`rounded-2xl p-3 sm:p-4 shadow-sm transition-all duration-300 border border-gray-700 ${
-                        activeId === item.id 
-                          ? 'ring-2 ring-red-500 bg-gradient-to-r from-red-900 to-red-800' 
-                          : 'bg-gradient-to-r from-gray-800 to-gray-900 hover:shadow-md hover:border-red-500'
-                      }`}
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
                     >
                       <div className="flex items-start gap-3 sm:gap-4">
                         <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-xl bg-white flex items-center justify-center shadow-sm overflow-hidden flex-shrink-0">

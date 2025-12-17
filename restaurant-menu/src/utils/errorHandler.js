@@ -40,13 +40,7 @@ export const HTTP_ERROR_MESSAGES = {
   504: 'Gateway timeout. Please try again later'
 };
 
-<<<<<<< HEAD
 //Classify error based on its type and content
-=======
-/**
- * Classify error based on its type and content
- */
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const classifyError = (error) => {
   // Check if it's a Firebase auth error
   if (error.code && error.code.startsWith('auth/')) {
@@ -105,13 +99,7 @@ export const classifyError = (error) => {
   return ERROR_TYPES.UNKNOWN_ERROR;
 };
 
-<<<<<<< HEAD
 // Get user-friendly error message
-=======
-/**
- * Get user-friendly error message
- */
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const getErrorMessage = (error) => {
   const errorType = classifyError(error);
 
@@ -168,13 +156,7 @@ export const getErrorMessage = (error) => {
   return error.message || 'An unexpected error occurred. Please try again.';
 };
 
-<<<<<<< HEAD
 // Log error for debugging (in development) or monitoring (in production)
-=======
-/**
- * Log error for debugging (in development) or monitoring (in production)
- */
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const logError = (error, context = '') => {
   const errorInfo = {
     message: error.message,
@@ -191,40 +173,21 @@ export const logError = (error, context = '') => {
     console.error('Error logged:', errorInfo);
   }
 
-<<<<<<< HEAD
   // In production, send to an error reporting service like Sentry, LogRocket, etc.
   if (process.env.NODE_ENV === 'production') {
-=======
-  // In production, you might want to send to an error reporting service
-  // like Sentry, LogRocket, etc.
-  if (process.env.NODE_ENV === 'production') {
-    // Example: sendToErrorReportingService(errorInfo);
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
     console.error('Production error:', errorInfo);
   }
 };
 
-<<<<<<< HEAD
 // Handle error with logging and return user-friendly message
  
-=======
-/**
- * Handle error with logging and return user-friendly message
- */
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const handleError = (error, context = '') => {
   logError(error, context);
   return getErrorMessage(error);
 };
 
-<<<<<<< HEAD
 // Retry function with exponential backoff
  
-=======
-/**
- * Retry function with exponential backoff
- */
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const retryWithBackoff = async (fn, maxRetries = 3, baseDelay = 1000) => {
   for (let i = 0; i < maxRetries; i++) {
     try {
@@ -238,14 +201,8 @@ export const retryWithBackoff = async (fn, maxRetries = 3, baseDelay = 1000) => 
   }
 };
 
-<<<<<<< HEAD
 // Validate form data
 
-=======
-/**
- * Validate form data
- */
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const validateFormData = (data, rules) => {
   const errors = {};
 

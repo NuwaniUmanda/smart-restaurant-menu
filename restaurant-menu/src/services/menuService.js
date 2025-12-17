@@ -29,11 +29,7 @@ export const createSizeOptionsStructure = (hasSmall = false, hasMedium = false, 
     sizeOptions.push({
       name: 'Medium',
       code: 'M',
-<<<<<<< HEAD
       price: 0, 
-=======
-      price: 0, // To be set by admin
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
       available: true
     });
   }
@@ -42,11 +38,7 @@ export const createSizeOptionsStructure = (hasSmall = false, hasMedium = false, 
     sizeOptions.push({
       name: 'Large',
       code: 'L',
-<<<<<<< HEAD
       price: 0, 
-=======
-      price: 0, // To be set by admin
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
       available: true
     });
   }
@@ -83,11 +75,7 @@ export const validateSizeOptions = (sizeOptions) => {
   };
 };
 
-<<<<<<< HEAD
 // Fetch all menu items 
-=======
-// Fetch all menu items (public, no auth required)
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const fetchMenuItems = async () => {
   try {
     const querySnapshot = await retryWithBackoff(async () => {
@@ -147,11 +135,7 @@ export const addMenuItem = async (item) => {
 
     const response = await retryWithBackoff(async () => {
       const controller = new AbortController();
-<<<<<<< HEAD
       const timeoutId = setTimeout(() => controller.abort(), 30000); 
-=======
-      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
       
       try {
         const res = await fetch(`${API_BASE_URL}/api/menu-items`, {

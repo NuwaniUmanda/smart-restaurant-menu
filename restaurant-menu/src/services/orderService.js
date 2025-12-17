@@ -16,14 +16,6 @@ import {
 // Collection name for orders
 const ORDERS_COLLECTION = "orders";
 
-<<<<<<< HEAD
-=======
-/**
- * Create a new order in Firestore
- * @param {Object} orderData - Order details including items, total, table number
- * @returns {Promise<Object>} Created order with ID
- */
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const createOrder = async (orderData) => {
   try {
     // Validate required fields
@@ -78,13 +70,8 @@ export const createOrder = async (orderData) => {
       
       // Order totals
       subtotal: total,
-<<<<<<< HEAD
       tax: 0,
       discount: 0, 
-=======
-      tax: 0, // Add tax calculation if needed
-      discount: 0, // Add discount if applicable
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
       total: total,
       
       // Order status and metadata
@@ -121,16 +108,8 @@ export const createOrder = async (orderData) => {
   }
 };
 
-<<<<<<< HEAD
 // Get all orders (for admin dashboard)
 
-=======
-/**
- * Get all orders (for admin dashboard)
- * @param {Object} filters - Optional filters (status, tableNumber, date range)
- * @returns {Promise<Array>} Array of orders
- */
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const getAllOrders = async (filters = {}) => {
   try {
     let ordersQuery = collection(db, ORDERS_COLLECTION);
@@ -173,15 +152,7 @@ export const getAllOrders = async (filters = {}) => {
   }
 };
 
-<<<<<<< HEAD
 // Get orders for a specific guest user
-=======
-/**
- * Get orders for a specific guest user
- * @param {string} guestId - Guest user ID
- * @returns {Promise<Array>} Array of user's orders
- */
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const getUserOrders = async (guestId) => {
   try {
     if (!guestId) {
@@ -214,15 +185,7 @@ export const getUserOrders = async (guestId) => {
   }
 };
 
-<<<<<<< HEAD
 // Get a single order by ID
-=======
-/**
- * Get a single order by ID
- * @param {string} orderId - Order ID
- * @returns {Promise<Object>} Order details
- */
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const getOrderById = async (orderId) => {
   try {
     const orderDoc = await getDoc(doc(db, ORDERS_COLLECTION, orderId));
@@ -243,16 +206,7 @@ export const getOrderById = async (orderId) => {
   }
 };
 
-<<<<<<< HEAD
 // Update order status
-=======
-/**
- * Update order status
- * @param {string} orderId - Order ID
- * @param {string} newStatus - New status (pending, confirmed, preparing, ready, served, completed, cancelled)
- * @returns {Promise<Object>} Updated order
- */
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const updateOrderStatus = async (orderId, newStatus) => {
   try {
     const validStatuses = ["pending", "confirmed", "preparing", "ready", "served", "completed", "cancelled"];
@@ -275,16 +229,7 @@ export const updateOrderStatus = async (orderId, newStatus) => {
   }
 };
 
-<<<<<<< HEAD
 // Update payment status
-=======
-/**
- * Update payment status
- * @param {string} orderId - Order ID
- * @param {string} paymentStatus - Payment status (unpaid, paid, refunded)
- * @returns {Promise<Object>} Updated order
- */
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const updatePaymentStatus = async (orderId, paymentStatus) => {
   try {
     const validPaymentStatuses = ["unpaid", "paid", "refunded"];
@@ -307,15 +252,7 @@ export const updatePaymentStatus = async (orderId, paymentStatus) => {
   }
 };
 
-<<<<<<< HEAD
 // Get orders by table number
-=======
-/**
- * Get orders by table number
- * @param {number} tableNumber - Table number
- * @returns {Promise<Array>} Array of orders for that table
- */
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const getOrdersByTable = async (tableNumber) => {
   try {
     const ordersQuery = query(
@@ -340,14 +277,7 @@ export const getOrdersByTable = async (tableNumber) => {
   }
 };
 
-<<<<<<< HEAD
 // Get today's orders
-=======
-/**
- * Get today's orders
- * @returns {Promise<Array>} Array of today's orders
- */
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const getTodayOrders = async () => {
   try {
     const today = new Date();
@@ -375,14 +305,7 @@ export const getTodayOrders = async () => {
   }
 };
 
-<<<<<<< HEAD
 // Generate a unique order number
-=======
-/**
- * Generate a unique order number
- * @returns {string} Order number in format: ORD-YYYYMMDD-XXXX
- */
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 const generateOrderNumber = () => {
   const date = new Date();
   const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
@@ -390,15 +313,7 @@ const generateOrderNumber = () => {
   return `ORD-${dateStr}-${randomNum}`;
 };
 
-<<<<<<< HEAD
 // Calculate order statistics
-=======
-/**
- * Calculate order statistics
- * @param {Array} orders - Array of orders
- * @returns {Object} Statistics object
- */
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const calculateOrderStats = (orders) => {
   return {
     totalOrders: orders.length,

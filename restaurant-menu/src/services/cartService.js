@@ -64,11 +64,7 @@ export const addToCart = async (cartItem, quantity = 1) => {
     console.log('Unique Item ID:', uniqueItemId);
     console.log('========================');
 
-<<<<<<< HEAD
     // Prepare cart item data
-=======
-    // Prepare cart item data with new size structure
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
     const cartItemData = {
       menuItemId: cartItem.id || cartItem.menuItemId,
       name: cartItem.name,
@@ -76,21 +72,13 @@ export const addToCart = async (cartItem, quantity = 1) => {
       image: cartItem.image || '',
       qty: quantity,
       
-<<<<<<< HEAD
       // Size-related fields
-=======
-      // Size-related fields (new structure)
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
       hasSizes: cartItem.hasSizes || false,
       basePrice: cartItem.basePrice || cartItem.price,
       selectedSize: cartItem.selectedSize ? {
         name: cartItem.selectedSize.name,
         price: cartItem.selectedSize.price,
-<<<<<<< HEAD
         code: cartItem.selectedSize.code 
-=======
-        code: cartItem.selectedSize.code // Include size code
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
       } : null,
       displayName: cartItem.selectedSize 
         ? `${cartItem.name} (${cartItem.selectedSize.name})`
@@ -201,11 +189,7 @@ export const clearCart = async () => {
   }
 };
 
-<<<<<<< HEAD
 // Create order from cart
-=======
-// Create order from cart - NOW STORES IN FIRESTORE!
->>>>>>> 96dfa78d819267cd8ce260245b0319e61301b189
 export const createOrder = async (orderDetails) => {
   try {
     const userId = getGuestUserId();
