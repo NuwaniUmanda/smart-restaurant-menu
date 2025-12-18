@@ -35,6 +35,40 @@ const MenuPage = ({ onCart, onAdmin }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
+  // Scroll to specific item when hash is present in URL
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#item-')) {
+      const itemId = hash.replace('#item-', '');
+      console.log('📍 Scrolling to item:', itemId);
+      
+      // Wait for menu to load and DOM to render
+      const scrollToItem = () => {
+        const element = document.getElementById(`item-${itemId}`);
+        if (element) {
+          console.log('✅ Found element, scrolling...');
+          setTimeout(() => {
+            element.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'center' 
+            });
+            // Highlight the item briefly
+            element.style.transition = 'box-shadow 0.3s ease';
+            element.style.boxShadow = '0 0 20px rgba(220, 38, 38, 0.8)';
+            setTimeout(() => {
+              element.style.boxShadow = '';
+            }, 2000);
+          }, 300);
+        } else {
+          console.log('⏳ Element not found yet, retrying...');
+          setTimeout(scrollToItem, 200);
+        }
+      };
+      
+      scrollToItem();
+    }
+  }, [menu, filteredMenu]);
+
   const categories = [
     "All", "Main Course", "Indian Food", "Fast Food", "Seafood", 
     "Appetizers", "Salads", "Soup", "Beverages", "Desserts"
@@ -209,14 +243,15 @@ const MenuPage = ({ onCart, onAdmin }) => {
       const prices = item.sizeOptions.map(size => size.price);
       const minPrice = Math.min(...prices);
       const maxPrice = Math.max(...prices);
-      return minPrice === maxPrice ? `LKR ${minPrice.toFixed(2)}` : `LKR ${minPrice.toFixed(2)} - ${maxPrice.toFixed(2)}`;
+      return `LKR ${(item.price || 0).toFixed(2)}`;
     }
-    return `LKR ${(item.price || 0).toFixed(2)}`;
+    {item.availableAmount === 0 ? 'Out of Stock' : `${item.availableAmount}`}
   };
 
   const renderMenuItem = (item) => (
     <div
       key={item.id}
+      id={`item-${item.id}`}
       className="bg-gradient-to-r from-gray-900 via-black to-gray-800 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-2xl border border-red-600 hover:border-red-400 transition-all duration-300 overflow-hidden group hover:shadow-red-600/20"
     >
       <div className="flex flex-row">
@@ -497,7 +532,7 @@ const MenuPage = ({ onCart, onAdmin }) => {
 
           <div className="flex justify-center items-center gap-2 sm:gap-4 text-red-400">
             <div className="w-8 h-0.5 sm:w-12 bg-gradient-to-r from-transparent to-red-600"></div>
-            <span className="text-2xl sm:text-3xl lg:text-4xl">🍽️</span>
+            <span className="text-2xl sm:text-3xl lg:text-4xl">🍽</span>
             <div className="w-8 h-0.5 sm:w-12 bg-gradient-to-l from-transparent to-red-600"></div>
           </div>
         </div>
