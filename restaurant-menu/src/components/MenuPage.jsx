@@ -67,7 +67,7 @@ const MenuPage = ({ onCart, onAdmin }) => {
       
       scrollToItem();
     }
-  }, [menu, filteredMenu]);
+  }, [menu]);
 
   const categories = [
     "All", "Main Course", "Indian Food", "Fast Food", "Seafood", 
@@ -243,9 +243,9 @@ const MenuPage = ({ onCart, onAdmin }) => {
       const prices = item.sizeOptions.map(size => size.price);
       const minPrice = Math.min(...prices);
       const maxPrice = Math.max(...prices);
-      return `LKR ${(item.price || 0).toFixed(2)}`;
+      return minPrice === maxPrice ? `LKR ${minPrice.toFixed(2)}` : `LKR ${minPrice.toFixed(2)} - ${maxPrice.toFixed(2)}`;  // ✅ Use minPrice/maxPrice
     }
-    {item.availableAmount === 0 ? 'Out of Stock' : `${item.availableAmount}`}
+    return `LKR ${(item.price || 0).toFixed(2)}`;  // ✅ Add return statement for non-sized items
   };
 
   const renderMenuItem = (item) => (
